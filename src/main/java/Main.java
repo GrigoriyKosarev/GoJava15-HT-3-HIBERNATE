@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Log4j2
 public class Main {
-    private static ServiceFactory serviceFactory = new ServiceFactory();
+    private static final ServiceFactory serviceFactory = new ServiceFactory();
 
     public static void main(String[] args) throws InternalException {
 

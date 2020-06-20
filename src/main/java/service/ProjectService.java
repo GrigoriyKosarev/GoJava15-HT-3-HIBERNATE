@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class ProjectService {
 
-    ProjectDAO projectDAO;
+    private final ProjectDAO projectDAO;
 
     public ProjectService(ProjectDAO projectDAO) {
         this.projectDAO = projectDAO;

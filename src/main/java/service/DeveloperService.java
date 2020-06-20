@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DeveloperService {
 
-    private DeveloperDAO developerDAO = new DeveloperDAO();
+    private final DeveloperDAO developerDAO;
 
     public DeveloperService(DeveloperDAO developerDAO) {
         this.developerDAO = developerDAO;

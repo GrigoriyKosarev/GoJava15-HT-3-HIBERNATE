@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CustomerService {
 
-    private CustomerDAO customerDAO;
+    private final CustomerDAO customerDAO;
 
     public CustomerService(CustomerDAO customerDAO) {
         this.customerDAO = customerDAO;
