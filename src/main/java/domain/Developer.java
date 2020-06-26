@@ -23,7 +23,7 @@ public class Developer {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sex")
-    private Sex  sex;
+    private Sex sex;
 
     @Column(name = "salary")
     private BigDecimal salary;

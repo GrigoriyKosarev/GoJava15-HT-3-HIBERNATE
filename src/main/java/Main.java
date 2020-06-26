@@ -11,53 +11,54 @@ import java.time.LocalDate;
 
 @Log4j2
 public class Main {
-    private static final ServiceFactory serviceFactory = new ServiceFactory();
 
     public static void main(String[] args) throws InternalException {
 
-        //CUSTOMER TEST
+        //!Помилка
+        ServiceFactory.getCustomerService().deleteCustomer(1);
 
-        serviceFactory.getCustomerService().addCustomer(new Customer("Apple", "Apple"));
-        log.info("find customers by name: " + serviceFactory.getCustomerService().getCustomer("BMW"));
-        serviceFactory.getCustomerService().addCustomer(new Customer("IBM", "IBM"));
-        //serviceFactory.getCustomerService().deleteCustomer(1);
+        //CUSTOMER TEST
+        ServiceFactory.getCustomerService().addCustomer(new Customer("Apple", "Apple"));
+        log.info("find customers by name: " + ServiceFactory.getCustomerService().getCustomer("BMW"));
+        ServiceFactory.getCustomerService().addCustomer(new Customer("IBM", "IBM"));
+        //ServiceFactory.getCustomerService().deleteCustomer(1);
         Customer newCustomer = new Customer(4, "Apple+", "Apple+");
-        serviceFactory.getCustomerService().editCustomer(newCustomer);
-        log.info("all customers: " + serviceFactory.getCustomerService().getAllCustomers());
+        ServiceFactory.getCustomerService().editCustomer(newCustomer);
+        log.info("all customers: " + ServiceFactory.getCustomerService().getAllCustomers());
 
         //PROJECT TEST
-        serviceFactory.getProjectService().addProject(new Project("Apple to do", "to do", new BigDecimal(1000), LocalDate.of(2020, 01, 01)));
-        log.info("find projects by name: " + serviceFactory.getProjectService().getProject("Apple to do"));
-        serviceFactory.getProjectService().addProject(new Project("IBM to do", "to do", new BigDecimal(2000), LocalDate.of(2020, 01, 01)));
+        ServiceFactory.getProjectService().addProject(new Project("Apple to do", "to do", new BigDecimal(1000), LocalDate.of(2020, 1, 1)));
+        log.info("find projects by name: " + ServiceFactory.getProjectService().getProject("Apple to do"));
+        ServiceFactory.getProjectService().addProject(new Project("IBM to do", "to do", new BigDecimal(2000), LocalDate.of(2020, 1, 1)));
         //serviceFactory.getProjectService().deleteProject(2);
-        Project newProject = new Project(2, "Apple to do +", "to do +", new BigDecimal(5000), LocalDate.of(2020, 01, 01));
-        serviceFactory.getProjectService().editProject(newProject);
-        log.info("all projects: " + serviceFactory.getProjectService().getAllProjects());
+        Project newProject = new Project(2, "Apple to do +", "to do +", new BigDecimal(5000), LocalDate.of(2020, 1, 1));
+        ServiceFactory.getProjectService().editProject(newProject);
+        log.info("all projects: " + ServiceFactory.getProjectService().getAllProjects());
 
         //DEVELOPER TEST
-        serviceFactory.getDeveloperService().addDeveloper(new Developer("Petro", 40, Sex.MEN, new BigDecimal(4000)));
-        log.info("find projects by name: " + serviceFactory.getDeveloperService().getDeveloper("Petro"));
-        serviceFactory.getDeveloperService().addDeveloper(new Developer("Vas-Vas", 20, Sex.MEN, new BigDecimal(800)));
+        ServiceFactory.getDeveloperService().addDeveloper(new Developer("Petro", 40, Sex.MEN, new BigDecimal(4000)));
+        log.info("find developers by name: " + ServiceFactory.getDeveloperService().getDeveloper("Petro"));
+        ServiceFactory.getDeveloperService().addDeveloper(new Developer("Vas-Vas", 20, Sex.MEN, new BigDecimal(800)));
         //serviceFactory.getDeveloperService().deleteDeveloper(serviceFactory.getDeveloperService().getDeveloper("Vas-Vas").getId());
         Developer newDeveloper = new Developer(4, "Petro+", 42, Sex.MEN, new BigDecimal(4000));
-        serviceFactory.getDeveloperService().editDeveloper(newDeveloper);
-        log.info("all projects: " + serviceFactory.getDeveloperService().getAllDevelopers());
+        ServiceFactory.getDeveloperService().editDeveloper(newDeveloper);
+        log.info("all developers: " + ServiceFactory.getDeveloperService().getAllDevelopers());
 
         log.info("Зарплата всех разработчиков отдельного проекта ('boots'): " +
-                serviceFactory.getDeveloperService().salaryFromAllDevelopersInProject("boots"));
+                ServiceFactory.getDeveloperService().salaryFromAllDevelopersInProject("boots"));
 
         log.info("Cписок разработчиков отдельного проекта ('boots'): " +
-                serviceFactory.getDeveloperService().projectDevelopers("boots"));
+                ServiceFactory.getDeveloperService().getAllDevelopersForProject("boots"));
 
         log.info("Cписок всех Java разработчиков: " +
-                serviceFactory.getDeveloperService().developersSkill("Java"));
+                ServiceFactory.getDeveloperService().getAllDevelopersForSkill("Java"));
 
 
         log.info("Cписок всех middle разработчиков: " +
-                serviceFactory.getDeveloperService().developersSkillLevel("Middle"));
+                ServiceFactory.getDeveloperService().getAllDevelopersForSkillLevel("Middle"));
 
         log.info("Cписок проектов в следующем формате: дата создания - название проекта - количество разработчиков на этом проекте: ");
-        log.info(serviceFactory.getProjectService().formatedProjectList());
-
+        log.info(ServiceFactory.getProjectService().formatedProjectList());
+        
     }
 }

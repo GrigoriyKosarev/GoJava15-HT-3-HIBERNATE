@@ -4,17 +4,17 @@ import repository.CustomerDAO;
 import repository.DeveloperDAO;
 import repository.ProjectDAO;
 
-public class ServiceFactory {
+public abstract class ServiceFactory {
 
-    public ProjectService getProjectService() {
+    public static ProjectService getProjectService() {
         return new ProjectService(new ProjectDAO());
     }
 
-    public DeveloperService getDeveloperService() {
+    public static DeveloperService getDeveloperService() {
         return new DeveloperService(new DeveloperDAO());
     }
 
-    public CustomerService getCustomerService() {
+    public static CustomerService getCustomerService() {
         return new CustomerService(new CustomerDAO());
     }
 

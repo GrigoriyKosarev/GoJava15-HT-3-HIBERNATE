@@ -4,6 +4,7 @@ import domain.Developer;
 import error.InternalException;
 import repository.DeveloperDAO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class DeveloperService {
@@ -38,20 +39,20 @@ public class DeveloperService {
         developerDAO.editDeveloper(developers);
     }
 
-    public double salaryFromAllDevelopersInProject(String projectName) {
+    public BigDecimal salaryFromAllDevelopersInProject(String projectName) {
         return developerDAO.salaryFromAllDevelopersInProject(projectName);
     }
 
-    public List<Developer> projectDevelopers(String projectName) {
-        return developerDAO.projectDevelopers(projectName);
+    public List<Developer> getAllDevelopersForProject(String projectName) {
+        return developerDAO.getAllDevelopersForProject(projectName);
     }
 
-    public List<Developer> developersSkill(String skillName) {
-        return developerDAO.developerSkill(skillName);
+    public List<Developer> getAllDevelopersForSkill(String skillName) {
+        return developerDAO.getAllDevelopersForSkill(skillName);
     }
 
-    public List<Developer> developersSkillLevel(String skillLevel) {
-        return developerDAO.developersSkillLevel(skillLevel);
+    public List<Developer> getAllDevelopersForSkillLevel(String skillLevel) {
+        return developerDAO.getAllDevelopersForSkillLevel(skillLevel);
     }
 
 }

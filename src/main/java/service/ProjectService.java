@@ -53,7 +53,7 @@ public class ProjectService {
     }
 
     private int countDevelopersInProject(String projectName) {
-        return new DeveloperService(new DeveloperDAO()).projectDevelopers(projectName).size();
+        return new DeveloperService(new DeveloperDAO()).getAllDevelopersForProject(projectName).size();
     }
 
 }
