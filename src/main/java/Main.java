@@ -14,8 +14,7 @@ public class Main {
 
     public static void main(String[] args) throws InternalException {
 
-        //!Помилка
-        ServiceFactory.getCustomerService().deleteCustomer(1);
+
 
         //CUSTOMER TEST
         ServiceFactory.getCustomerService().addCustomer(new Customer("Apple", "Apple"));
@@ -30,7 +29,7 @@ public class Main {
         ServiceFactory.getProjectService().addProject(new Project("Apple to do", "to do", new BigDecimal(1000), LocalDate.of(2020, 1, 1)));
         log.info("find projects by name: " + ServiceFactory.getProjectService().getProject("Apple to do"));
         ServiceFactory.getProjectService().addProject(new Project("IBM to do", "to do", new BigDecimal(2000), LocalDate.of(2020, 1, 1)));
-        //serviceFactory.getProjectService().deleteProject(2);
+        //ServiceFactory.getProjectService().deleteProject(2);
         Project newProject = new Project(2, "Apple to do +", "to do +", new BigDecimal(5000), LocalDate.of(2020, 1, 1));
         ServiceFactory.getProjectService().editProject(newProject);
         log.info("all projects: " + ServiceFactory.getProjectService().getAllProjects());
@@ -39,7 +38,7 @@ public class Main {
         ServiceFactory.getDeveloperService().addDeveloper(new Developer("Petro", 40, Sex.MEN, new BigDecimal(4000)));
         log.info("find developers by name: " + ServiceFactory.getDeveloperService().getDeveloper("Petro"));
         ServiceFactory.getDeveloperService().addDeveloper(new Developer("Vas-Vas", 20, Sex.MEN, new BigDecimal(800)));
-        //serviceFactory.getDeveloperService().deleteDeveloper(serviceFactory.getDeveloperService().getDeveloper("Vas-Vas").getId());
+        //ServiceFactory.getDeveloperService().deleteDeveloper(serviceFactory.getDeveloperService().getDeveloper("Vas-Vas").getId());
         Developer newDeveloper = new Developer(4, "Petro+", 42, Sex.MEN, new BigDecimal(4000));
         ServiceFactory.getDeveloperService().editDeveloper(newDeveloper);
         log.info("all developers: " + ServiceFactory.getDeveloperService().getAllDevelopers());
@@ -59,6 +58,6 @@ public class Main {
 
         log.info("Cписок проектов в следующем формате: дата создания - название проекта - количество разработчиков на этом проекте: ");
         log.info(ServiceFactory.getProjectService().formatedProjectList());
-        
+
     }
 }

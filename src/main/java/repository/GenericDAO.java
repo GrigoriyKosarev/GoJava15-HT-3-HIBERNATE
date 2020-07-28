@@ -11,11 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Log4j2
-public class GenericDAO<T, ID> {
+public abstract class GenericDAO<T, ID> {
     private EntityManager entityManager;
 
     GenericDAO() {
-        //entityManager = new GenericDAO().getEntityManager();
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("persistence-goit");
         entityManager = entityManagerFactory.createEntityManager();
     }
@@ -24,24 +23,26 @@ public class GenericDAO<T, ID> {
         return entityManager;
     }
 
-    public Optional<T> get(int id, Class<T> entityClass) {
+    public Optional<T> get(ID id, Class<T> entityClass) throws InternalException {
         T entity = null;
         entityManager = getEntityManager();
         try {
             entity = entityManager.find(entityClass, id);
             return Optional.ofNullable(entity);
         } catch (Exception e) {
-            log.error("get"+ entity.getClass().getSimpleName() +" operation Exception.");
-            return Optional.empty();
+            log.error("get "+ entityClass +" operation Exception. Cause={}", e.getMessage());
+            log.trace(e.getStackTrace());
+            throw new InternalException("get operation Exception. " + e.getMessage());
         } finally {
             entityManager.close();
         }
     }
 
-    public Optional<T> get(String name, String queryString) {
+    public Optional<T> get(String name, Class<T> entityClass) throws InternalException {
         entityManager = getEntityManager();
+        String entityClassName = entityClass.getSimpleName();
         try {
-            List<T> resultList = (List<T>) entityManager.createQuery(queryString)
+            List<T> resultList = (List<T>) entityManager.createQuery("select " +entityClassName.toLowerCase() + " from " + entityClassName + " " + entityClassName.toLowerCase() + " where " + entityClassName.toLowerCase() + ".name = :name")
                     .setParameter("name", name)
                     .getResultList();
             if (resultList.size() > 0)
@@ -49,59 +50,85 @@ public class GenericDAO<T, ID> {
             else
                 return Optional.empty();
         } catch (Exception e) {
-            log.error("get operation Exception.");
-            return Optional.empty();
+            log.error("get operation Exception. Cause={}", e.getMessage());
+            log.trace(e.getStackTrace());
+            throw new InternalException("get operation Exception. " + e.getMessage());
         } finally {
             entityManager.close();
         }
     }
 
-    public List<T> getAll(String queryString) {
+    public List<T> getAll(Class<T> entityClass) throws InternalException {
         entityManager = getEntityManager();
         try {
-            return entityManager.createQuery(queryString).getResultList();
+            return entityManager.createQuery("select " + entityClass.getSimpleName().toLowerCase() + " from " + entityClass.getSimpleName() + " " + entityClass.getSimpleName().toLowerCase()).getResultList();
         } catch (Exception e) {
-            log.error("getAll operation Exception.");
-            return new ArrayList<>();
+            log.error("getAll operation Exception. Cause={}", e.getMessage());
+            log.trace(e.getStackTrace());
+            throw new InternalException("getAll operation Exception. " + e.getMessage());
         } finally {
             entityManager.close();
         }
     }
 
-    public void add(T entity) {
+    public void add(T entity) throws InternalException {
         entityManager = getEntityManager();
         try {
             entityManager.getTransaction().begin();
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            log.error("add" +  entity.getClass().getSimpleName() + " operation Exception.");
+            log.error("add" +  entity.getClass().getSimpleName() + " operation Exception. Cause={}", e.getMessage());
+            log.trace(e.getStackTrace());
             entityManager.getTransaction().rollback();
+            throw new InternalException("add" +  entity.getClass().getSimpleName() + " operation Exception. " + e.getMessage());
         } finally {
             entityManager.close();
         }
     }
 
-    public void delete(Class<T> entityClass, int id) {
+    public void delete(int id, Class<T> entityClass) throws InternalException {
         entityManager = getEntityManager();
         try {
             entityManager.getTransaction().begin();
             T entityFromDB = entityManager.find(entityClass, id);
             if (entityFromDB != null) {
                 entityManager.remove(entityFromDB);
-                entityManager.flush();
-                entityManager.clear();
-                //entityManager.getTransaction().commit();
+                entityManager.getTransaction().commit();
             } else {
                 log.error("Delete operation. Entity not found by id: " + id);
                 throw new InternalException("Delete operation. Entity not found by id: " + id);
             }
         } catch (Exception e) {
-            log.error("delete operation Exception.");
+            log.error("delete operation Exception. Cause={}", e.getMessage());
+            log.trace(e.getStackTrace());
+            entityManager.getTransaction().rollback();
+            throw new InternalException("delete operation Exception. " + e.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public void edit(T entity, ID id, Class<T> entityClass) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            T entityFromDB = entityManager.find(entityClass, id);
+            if (entityFromDB != null) {
+                entityManager.merge(entity);
+                entityManager.persist(entityFromDB);
+                entityManager.getTransaction().commit();
+            } else {
+                log.error("Edit operation. Project not found by id: " + id);
+                throw new InternalException("Edit operation. Project not found by id: " + id);
+            }
+        } catch (Exception e) {
+            log.error("editCustomer operation Exception.");
             entityManager.getTransaction().rollback();
         } finally {
             entityManager.close();
         }
     }
+
 
 }

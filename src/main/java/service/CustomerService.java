@@ -14,19 +14,19 @@ public class CustomerService {
         this.customerDAO = customerDAO;
     }
 
-    public Customer getCustomer(int id) {
+    public Customer getCustomer(int id) throws InternalException {
         return customerDAO.getCustomer(id).orElseThrow(() -> {throw new RuntimeException("Customer not found by id " + id);});
     }
 
-    public Customer getCustomer(String name) {
+    public Customer getCustomer(String name) throws InternalException {
         return customerDAO.getCustomer(name).orElseThrow(() -> {throw new RuntimeException("Customer not found by name " + name);});
     }
 
-    public List<Customer> getAllCustomers() {
+    public List<Customer> getAllCustomers() throws InternalException {
         return customerDAO.getAllCustomer();
     }
 
-    public void addCustomer(Customer customer) {
+    public void addCustomer(Customer customer) throws InternalException {
         customerDAO.addCustomer(customer);
     }
 

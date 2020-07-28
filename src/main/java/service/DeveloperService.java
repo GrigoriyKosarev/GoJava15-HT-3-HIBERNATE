@@ -15,19 +15,19 @@ public class DeveloperService {
         this.developerDAO = developerDAO;
     }
 
-    public Developer getDeveloper(int id) {
+    public Developer getDeveloper(int id) throws InternalException {
         return developerDAO.getDeveloper(id).orElseThrow(() -> {throw new RuntimeException("Developer not found by id " + id);});
     }
 
-    public Developer getDeveloper(String name) {
+    public Developer getDeveloper(String name) throws InternalException {
         return developerDAO.getDeveloper(name).orElseThrow(() -> {throw new RuntimeException("Developer not found by name " + name);});
     }
 
-    public List<Developer> getAllDevelopers() {
+    public List<Developer> getAllDevelopers() throws InternalException {
         return developerDAO.getAllDevelopers();
     }
 
-    public void addDeveloper(Developer developers) {
+    public void addDeveloper(Developer developers) throws InternalException {
         developerDAO.addDeveloper(developers);
     }
 

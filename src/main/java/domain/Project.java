@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "projects")
@@ -27,6 +28,27 @@ public class Project {
 
     @Column(name = "createDate")
     private LocalDate createDate;
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name="customers_projects",
+            joinColumns=@JoinColumn(name="project_id"),
+            inverseJoinColumns=@JoinColumn(name="customer_id")
+    )
+    private List<Customer> customers;
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name="companies_projects",
+            joinColumns=@JoinColumn(name="project_id"),
+            inverseJoinColumns=@JoinColumn(name="company_id")
+    )
+    private List<Project> projects;
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name="developers_projects",
+            joinColumns=@JoinColumn(name="project_id"),
+            inverseJoinColumns=@JoinColumn(name="developer_id")
+    )
+    private List<Developer> developers;
 
     public Project(String name, String comment, BigDecimal cost, LocalDate createDate) {
         setName(name);

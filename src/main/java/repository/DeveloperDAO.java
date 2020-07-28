@@ -13,47 +13,30 @@ import java.util.List;
 import java.util.Optional;
 
 @Log4j2
-public class DeveloperDAO {
+public class DeveloperDAO extends GenericDAO<Developer, Integer> {
 
-    public Optional<Developer> getDeveloper(int id) {
-        return new GenericDAO<Developer, ID>().get(id, Developer.class);
+    public Optional<Developer> getDeveloper(int id) throws InternalException {
+        return get(id, Developer.class);
     }
 
-    public Optional<Developer> getDeveloper(String name) {
-        return new GenericDAO<Developer, ID>().get(name, "select developer from Developer developer where developer.name = :name");
+    public Optional<Developer> getDeveloper(String name) throws InternalException {
+        return get(name, Developer.class);
     }
 
-    public List<Developer> getAllDevelopers() {
-        return new GenericDAO<Developer, ID>().getAll("select developer from Developer developer");
+    public List<Developer> getAllDevelopers() throws InternalException {
+        return getAll(Developer.class);
     }
 
-    public void addDeveloper(Developer developer) {
-        new GenericDAO<Developer, ID>().add(developer);
+    public void addDeveloper(Developer developer) throws InternalException {
+        add(developer);
     }
 
-    public void deleteDeveloper(int id) {
-        new GenericDAO<Developer, ID>().delete(Developer.class, id);
+    public void deleteDeveloper(int id) throws InternalException {
+        delete(id, Developer.class);
     }
 
     public void editDeveloper(Developer developer) throws InternalException {
-        EntityManager entityManager = new GenericDAO().getEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            Developer developerFromDB = entityManager.find(Developer.class, developer.getId());
-            if (developerFromDB != null) {
-                entityManager.merge(developer);
-                entityManager.persist(developerFromDB);
-                entityManager.getTransaction().commit();
-            } else {
-                log.error("Edit operation. Developer not found by id: " + developer.getId());
-                throw new InternalException("Edit operation. Developer not found by id: " + developer.getId());
-            }
-        } catch (Exception e) {
-            log.error("editDeveloper operation Exception.");
-            entityManager.getTransaction().rollback();
-        } finally {
-            entityManager.close();
-        }
+        edit(developer, developer.getId(), Developer.class);
     }
 
     public BigDecimal salaryFromAllDevelopersInProject(String projectName) {
@@ -63,7 +46,7 @@ public class DeveloperDAO {
                 "Left JOIN developers_projects ON developers_projects.project_id = projects.id " +
                 "Left JOIN developers ON developers_projects.developer_id = developers.id " +
                 "where projects.name = '" + projectName + "'";
-        EntityManager entityManager = new GenericDAO().getEntityManager();
+        EntityManager entityManager = getEntityManager();
         try {
             Double resultFromQuery = (Double) entityManager.createNativeQuery(selectQwery).getSingleResult();
             return new BigDecimal(resultFromQuery);
@@ -87,7 +70,7 @@ public class DeveloperDAO {
                 "Left join developers on developers.id = developers_projects.developer_id " +
                 "Left join projects on projects.id = developers_projects.project_id " +
                 "where projects.name = '" + projectName + "'";
-        EntityManager entityManager = new GenericDAO().getEntityManager();
+        EntityManager entityManager = getEntityManager();
         try {
             List<Object[]> resultQuery = entityManager.createNativeQuery(selectQuery).getResultList();
             for (Object[] row : resultQuery) {
@@ -122,7 +105,7 @@ public class DeveloperDAO {
                 "left join developers on skills_developers.developer_id = developers.id " +
                 "where skills.name = '" + skillName + "'";
 
-        EntityManager entityManager = new GenericDAO().getEntityManager();
+        EntityManager entityManager = getEntityManager();
         try {
             List<Object[]> resultQuery = entityManager.createNativeQuery(selectQuery).getResultList();
             for (Object[] row : resultQuery) {
@@ -157,7 +140,7 @@ public class DeveloperDAO {
                 "left join developers on skills_developers.developer_id = developers.id " +
                 "where skill_levels.name = '" + skillLevel + "'";
 
-        EntityManager entityManager = new GenericDAO().getEntityManager();
+        EntityManager entityManager = getEntityManager();
         try {
             List<Object[]> resultQuery = entityManager.createNativeQuery(selectQuery).getResultList();
             for (Object[] row : resultQuery) {

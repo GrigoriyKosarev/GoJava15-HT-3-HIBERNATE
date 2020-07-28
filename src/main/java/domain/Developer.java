@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "developers")
@@ -27,6 +28,20 @@ public class Developer {
 
     @Column(name = "salary")
     private BigDecimal salary;
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name="developers_projects",
+            joinColumns=@JoinColumn(name="developer_id"),
+            inverseJoinColumns=@JoinColumn(name="project_id")
+    )
+    private List<Project> projects;
+
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name="skills_developers",
+            joinColumns=@JoinColumn(name="developer_id"),
+            inverseJoinColumns=@JoinColumn(name="skill_id")
+    )
+    private List<Developer> developers;
 
     public Developer(String name, int age, Sex sex, BigDecimal salary) {
         setName(name);
