@@ -1,11 +1,10 @@
 package repository;
 
 
-import domain.ID;
 import domain.Project;
 import error.InternalException;
 import lombok.extern.log4j.Log4j2;
-import javax.persistence.EntityManager;
+
 import java.util.List;
 import java.util.Optional;
 

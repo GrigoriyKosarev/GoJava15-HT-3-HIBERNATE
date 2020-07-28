@@ -1,7 +1,6 @@
 package repository;
 
 import domain.Developer;
-import domain.ID;
 import domain.Sex;
 import error.InternalException;
 import lombok.extern.log4j.Log4j2;
